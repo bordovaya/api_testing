@@ -10,17 +10,17 @@ def test_list_users():
     assert res.status_code == HTTPStatus.OK
     #Assert.validate_schema(res.json())
 
-def single_user_not_found():
+def test_single_user_not_found():
     res = api.single_user_not_found()
     assert res.status_code == HTTPStatus.NOT_FOUND
     # Assert.validate_schema(res.json())
 
-def single_user():
+def test_single_user():
     res = api.single_user()
     res_body = res.json()
     assert res.status_code == HTTPStatus.OK
     # Assert.validate_schema(res_body)
-    assert res_body["data"] ["first_name"] == "Janet"
+    assert res_body["data"]["first_name"] == "Janet"
     example = {
         "data": {
             "id": 2,
@@ -37,8 +37,8 @@ def single_user():
     assert example == res_body
 
 def test_create():
-    name = 'Janet1234'
-    job = 'Tester1234'
+    name = 'Boris'
+    job = 'Tester'
     res = api.create(name, job)
 
     assert res.status_code == HTTPStatus.CREATED
@@ -46,6 +46,28 @@ def test_create():
     assert res.json()['job'] == job
 
     assert api.delete_user(res.json()['id']).status_code == HTTPStatus.NO_CONTENT
+
+def test_register_user():
+    email = 'eve.holt@reqres.in'
+    password = '111'
+    res = api.register_user(email, password)
+
+    assert res.status_code == HTTPStatus.OK
+
+def test_incorrect_register_user():
+    email = 'eve.holt@reqres.in'
+    res = api.incorrect_register_user(email)
+    res_body = res.json()
+
+    assert res.status_code == HTTPStatus.BAD_REQUEST
+    assert res_body["data"]["error"] == "Missing password"
+    example = {
+        "data": {
+            "error": "Missing password"
+        }
+
+    }
+    assert example == res_body
 
 
 

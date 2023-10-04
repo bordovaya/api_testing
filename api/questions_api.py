@@ -9,7 +9,7 @@ class Api(Client):
     def list_users(self):
         """
         method get
-        rout /users&page=2
+        rout /users?page=2
         status 200"""
 
         url = self.BASE_URL + self.USERS + '?page=2'
@@ -56,6 +56,34 @@ class Api(Client):
                 status 204"""
         url = self.BASE_URL + self.USERS + F"/{id}"
         return self.delete(url)
+
+    def register_user(self, email: str, password: str):
+        """method post
+        routs /register
+        status 200"""
+        url = self.BASE_URL + '/register'
+        payload = json.dumps({
+            "email": F"{email}",
+            "password": F"{password}"
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        return self.post(url, headers, payload)
+
+    def incorrect_register_user(self, email: str):
+        """method post
+                routs /register
+                status 400"""
+        url = self.BASE_URL + '/register'
+        payload = json.dumps({
+            "email": F"{email}"
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        return self.post(url, headers, payload)
+
 
 
 api = Api()
